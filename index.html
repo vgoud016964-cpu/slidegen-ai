@@ -1,1 +1,1150 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#081326">
+<meta name="description" content="Create beautiful AI-powered PowerPoint presentations for free.">
+<title>SlideGen AI — Presentation Studio</title>
+
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+<style>
+:root {
+  --bg:#081326;
+  --panel:#101f38;
+  --panel2:#152744;
+  --gold:#f0c45c;
+  --text:#f5f7fc;
+  --muted:#9aabc4;
+  --line:#293c59;
+  --green:#38c99a;
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family:Inter,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(ellipse at 10% 0%,#1c3158 0,transparent 35%),
+    radial-gradient(ellipse at 90% 70%,#25234e 0,transparent 35%),
+    var(--bg);
+  min-height:100vh;
+}
+
+button,input,select,textarea {font:inherit}
+button {cursor:pointer}
+
+.navbar {
+  height:76px;
+  padding:0 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:#081326eF;
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(15px);
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.brand-icon {
+  width:39px;height:39px;
+  display:grid;place-items:center;
+  background:linear-gradient(140deg,#ffe19a,#d69b32);
+  color:#17233a;
+  border-radius:12px;
+  font-size:21px;
+}
+
+.brand span {color:var(--gold)}
+
+.nav-right {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.free-pill {
+  border:1px solid #286b58;
+  background:#123c32;
+  color:#68e2b7;
+  padding:8px 13px;
+  border-radius:30px;
+}
+
+.container {
+  width:min(1150px,92%);
+  margin:auto;
+  padding:55px 0 80px;
+}
+
+.hero {
+  text-align:center;
+  margin-bottom:38px;
+}
+
+.eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid #705a31;
+  color:#f4cd77;
+  background:#372b183d;
+  padding:9px 16px;
+  border-radius:40px;
+  font-size:11px;
+  letter-spacing:1.4px;
+  font-weight:800;
+  margin-bottom:23px;
+}
+
+.hero h1 {
+  font-size:clamp(38px,6vw,65px);
+  line-height:1.08;
+  letter-spacing:-2px;
+  margin-bottom:18px;
+}
+
+.gradient {
+  background:linear-gradient(100deg,#fff0bc,#e7b64a,#f6d98a);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p {
+  color:var(--muted);
+  line-height:1.8;
+  max-width:600px;
+  margin:auto;
+  font-size:15px;
+}
+
+.features {
+  display:flex;
+  justify-content:center;
+  gap:23px;
+  flex-wrap:wrap;
+  margin-top:23px;
+  color:#b6c4d9;
+  font-size:12px;
+}
+
+.feature {display:flex;align-items:center;gap:7px}
+.feature b {color:var(--gold)}
+
+.studio {
+  background:linear-gradient(145deg,#132541,#0e1b31);
+  border:1px solid #354b6b;
+  border-radius:23px;
+  padding:30px;
+  box-shadow:0 30px 90px #0005;
+}
+
+.section-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.section-top h2 {font-size:21px}
+.section-top p {color:var(--muted);font-size:12px;margin-top:7px}
+
+.step {
+  color:var(--gold);
+  border:1px solid #66532d;
+  border-radius:30px;
+  padding:8px 13px;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+label {
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.topic-wrap {position:relative}
+
+.topic-wrap textarea {
+  width:100%;
+  min-height:112px;
+  resize:vertical;
+  padding:17px;
+  background:#09172c;
+  border:1px solid #344a68;
+  color:white;
+  border-radius:13px;
+  outline:none;
+  font-size:15px;
+  line-height:1.6;
+}
+
+.topic-wrap textarea:focus,
+select:focus,input:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px #f0c45c18;
+}
+
+.hint {
+  color:#8294af;
+  font-size:11px;
+  text-align:right;
+  margin-top:7px;
+}
+
+.options {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:23px;
+}
+
+.field select {
+  width:100%;
+  padding:15px;
+  border-radius:11px;
+  border:1px solid #344a68;
+  background:#09172c;
+  color:white;
+  outline:none;
+  cursor:pointer;
+}
+
+.generate {
+  width:100%;
+  margin-top:27px;
+  padding:18px;
+  background:linear-gradient(100deg,#f8dc91,#e5ad40);
+  color:#17233a;
+  font-weight:900;
+  font-size:15px;
+  border:0;
+  border-radius:12px;
+  transition:.25s;
+  box-shadow:0 8px 25px #d9a73b25;
+}
+
+.generate:hover {
+  transform:translateY(-3px);
+  box-shadow:0 13px 35px #d9a73b40;
+}
+
+button:disabled {opacity:.55;cursor:not-allowed;transform:none!important}
+
+.status {
+  display:none;
+  margin-top:20px;
+  padding:14px;
+  text-align:center;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.status.info {display:block;background:#172d4b;color:#d5e2f5}
+.status.success {display:block;background:#123c32;color:#8ce6c2}
+.status.error {display:block;background:#46202a;color:#ffbdc8}
+
+.spinner {
+  width:15px;height:15px;
+  display:inline-block;
+  border:2px solid #17233a66;
+  border-top-color:#17233a;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  vertical-align:middle;
+  margin-right:8px;
+}
+
+@keyframes spin {to{transform:rotate(360deg)}}
+
+.results {margin-top:35px;display:none}
+
+.results-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.results-head h2 {font-size:23px}
+.results-head p {color:var(--muted);font-size:12px;margin-top:6px}
+
+.result-actions {display:flex;gap:9px;flex-wrap:wrap}
+
+.small-btn {
+  border:1px solid #415572;
+  background:#152744;
+  color:white;
+  padding:10px 14px;
+  border-radius:9px;
+  font-size:12px;
+}
+
+.small-btn:hover {border-color:var(--gold)}
+
+.search {
+  width:100%;
+  padding:13px 15px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#09172c;
+  color:white;
+  outline:none;
+  margin-bottom:17px;
+}
+
+.slide-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+
+.slide-card {
+  border:1px solid #354968;
+  background:#152744;
+  border-radius:14px;
+  padding:19px;
+  transition:.2s;
+  min-width:0;
+}
+
+.slide-card:hover {
+  border-color:#c9a34e;
+  transform:translateY(-2px);
+}
+
+.slide-number {
+  color:var(--gold);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  margin-bottom:12px;
+}
+
+.slide-card h3 {
+  font-size:17px;
+  line-height:1.4;
+  margin-bottom:9px;
+}
+
+.slide-subtitle {
+  font-size:12px;
+  color:#9eafc7;
+  line-height:1.5;
+  margin-bottom:13px;
+}
+
+.slide-card ul {
+  padding-left:18px;
+  color:#d3dceb;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.takeaway {
+  margin-top:13px;
+  padding:10px;
+  border-radius:8px;
+  background:#2b2a2344;
+  border:1px solid #75623b;
+  color:#f2d68e;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.download-area {
+  margin-top:24px;
+  background:#0c1c33;
+  border:1px solid #344a68;
+  border-radius:14px;
+  padding:21px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.download-area h3 {font-size:15px}
+.download-area p {font-size:11px;color:var(--muted);margin-top:6px}
+
+.download {
+  padding:14px 20px;
+  border:0;
+  background:var(--green);
+  color:#062c21;
+  border-radius:10px;
+  font-weight:900;
+  font-size:13px;
+}
+
+.download:hover {filter:brightness(1.1)}
+
+.empty {
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+  grid-column:1/-1;
+}
+
+.footer {
+  text-align:center;
+  padding:25px 10px;
+  color:#7889a3;
+  font-size:11px;
+  line-height:1.8;
+}
+
+@media(max-width:650px) {
+  .navbar {padding:0 4%;height:65px}
+  .brand {font-size:18px}
+  .nav-right .nav-label {display:none}
+  .container {padding-top:39px}
+  .studio {padding:20px}
+  .options,.slide-list {grid-template-columns:1fr}
+  .hero h1 {letter-spacing:-1px}
+  .section-top {align-items:flex-start}
+  .download {width:100%}
+  .download-area {text-align:center}
+  .download-area > div {width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="brand">
+    <div class="brand-icon">✦</div>
+    SLIDEGEN <span>AI</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-label">YOUR PRESENTATION STUDIO</span>
+    <span class="free-pill">● FREE PLAN</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <div class="eyebrow">✦ INTELLIGENT PRESENTATION CREATOR</div>
+    <h1>Turn your ideas into<br><span class="gradient">beautiful slides.</span></h1>
+    <p>
+      One topic. A few seconds. An entire presentation.
+      Let artificial intelligence organize your ideas into
+      professional PowerPoint slides.
+    </p>
+
+    <div class="features">
+      <div class="feature"><b>✦</b> AI generated</div>
+      <div class="feature"><b>✓</b> Editable PPTX</div>
+      <div class="feature"><b>↓</b> Free download</div>
+    </div>
+  </section>
+
+  <section class="studio">
+
+    <div class="section-top">
+      <div>
+        <h2>Create your presentation</h2>
+        <p>Customize your presentation before generating.</p>
+      </div>
+      <span class="step">STEP 01 / CREATE</span>
+    </div>
+
+    <form id="generatorForm">
+
+      <div class="topic-wrap">
+        <label for="topic">YOUR PRESENTATION TOPIC</label>
+        <textarea
+          id="topic"
+          maxlength="200"
+          required
+          placeholder="Example: The Solar System, Indian Mathematics, Artificial Intelligence, Climate Change..."
+        ></textarea>
+        <div class="hint"><span id="charCount">0</span>/200 characters</div>
+      </div>
+
+      <div class="options">
+
+        <div class="field">
+          <label for="slideCount">NUMBER OF SLIDES</label>
+          <select id="slideCount">
+            <option value="3">3 Slides</option>
+            <option value="5">5 Slides</option>
+            <option value="8">8 Slides</option>
+            <option value="10" selected>10 Slides</option>
+            <option value="12">12 Slides</option>
+            <option value="15">15 Slides</option>
+            <option value="20">20 Slides</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="design">DESIGN STYLE</label>
+          <select id="design">
+            <option value="Professional">Professional Business</option>
+            <option value="Modern Dark">Modern Dark</option>
+            <option value="Educational">Educational Colourful</option>
+            <option value="Minimal White">Minimal White</option>
+            <option value="Creative Colourful">Creative Colourful</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="generate" id="generateBtn" type="submit">
+        ✦ &nbsp; GENERATE MY PRESENTATION
+      </button>
+
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  </section>
+
+  <section class="results" id="results">
+
+    <div class="results-head">
+      <div>
+        <h2>Your presentation is ready ✦</h2>
+        <p id="resultInfo">Preview your AI-generated slides.</p>
+      </div>
+      <div class="result-actions">
+        <button class="small-btn" id="copyBtn">Copy outline</button>
+        <button class="small-btn" id="newBtn">＋ New presentation</button>
+      </div>
+    </div>
+
+    <input
+      type="search"
+      class="search"
+      id="slideSearch"
+      placeholder="⌕  Search within your slides..."
+    >
+
+    <div class="slide-list" id="slideList"></div>
+
+    <div class="download-area">
+      <div>
+        <h3>Ready to present?</h3>
+        <p>Your presentation will be downloaded as an editable PowerPoint file.</p>
+      </div>
+      <button class="download" id="downloadBtn">
+        ↓ &nbsp; DOWNLOAD PPTX
+      </button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <strong>SLIDEGEN AI</strong> · YOUR IDEAS, BEAUTIFULLY PRESENTED
+  <br>
+  Free AI-assisted presentation creation · Powered by Gemini
+</footer>
+
+<script>
+
+// =======================================
+// CONFIGURATION
+// =======================================
+
+const WORKER_URL =
+  "https://slidegen-api.vgoud016964.workers.dev";
+
+let currentDeck = null;
+let currentTheme = "Professional";
+
+const $ = id => document.getElementById(id);
+
+const form = $("generatorForm");
+const topic = $("topic");
+const slideCount = $("slideCount");
+const design = $("design");
+const generateBtn = $("generateBtn");
+const statusBox = $("status");
+const results = $("results");
+const slideList = $("slideList");
+const downloadBtn = $("downloadBtn");
+
+
+// =======================================
+// CHARACTER COUNTER
+// =======================================
+
+topic.addEventListener("input", () => {
+  $("charCount").textContent = topic.value.length;
+});
+
+
+// =======================================
+// STATUS MESSAGE
+// =======================================
+
+function showStatus(message, type = "info") {
+  statusBox.className = "status " + type;
+  statusBox.textContent = message;
+}
+
+function clearStatus() {
+  statusBox.className = "status";
+  statusBox.textContent = "";
+}
+
+
+// =======================================
+// GENERATE AI PRESENTATION
+// =======================================
+
+form.addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const subject = topic.value.trim();
+  const count = Number(slideCount.value);
+
+  if (!subject) {
+    showStatus("Please enter a presentation topic.", "error");
+    return;
+  }
+
+  currentDeck = null;
+  results.style.display = "none";
+  generateBtn.disabled = true;
+  generateBtn.innerHTML =
+    '<span class="spinner"></span> CREATING YOUR PRESENTATION...';
+
+  showStatus("Connecting to AI and preparing your slides...", "info");
+
+  try {
+
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        topic: subject,
+        slideCount: count,
+        style: design.value
+      })
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("The AI server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI generation failed.");
+    }
+
+    if (
+      !data.slides ||
+      !Array.isArray(data.slides) ||
+      data.slides.length !== count
+    ) {
+      throw new Error("The AI returned an incorrect slide count.");
+    }
+
+    for (const slide of data.slides) {
+      if (
+        typeof slide.title !== "string" ||
+        !Array.isArray(slide.bullets)
+      ) {
+        throw new Error("The AI returned an invalid slide.");
+      }
+    }
+
+    currentDeck = data;
+    currentTheme = design.value;
+
+    renderSlides(data.slides);
+
+    $("resultInfo").textContent =
+      count + " slides · " + currentTheme + " · " + subject;
+
+    results.style.display = "block";
+
+    showStatus(
+      "✓ Your presentation has been generated successfully!",
+      "success"
+    );
+
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  } catch (error) {
+
+    showStatus(
+      "Unable to generate presentation: " + error.message,
+      "error"
+    );
+
+  } finally {
+
+    generateBtn.disabled = false;
+    generateBtn.textContent = "✦  GENERATE MY PRESENTATION";
+
+  }
+
+});
+
+
+// =======================================
+// RENDER SLIDE PREVIEW
+// =======================================
+
+function renderSlides(slides) {
+
+  slideList.replaceChildren();
+
+  slides.forEach((slide, index) => {
+
+    const card = document.createElement("article");
+    card.className = "slide-card";
+
+    const number = document.createElement("div");
+    number.className = "slide-number";
+    number.textContent =
+      "SLIDE " + String(index + 1).padStart(2, "0");
+
+    const heading = document.createElement("h3");
+    heading.textContent = slide.title;
+
+    const subtitle = document.createElement("p");
+    subtitle.className = "slide-subtitle";
+    subtitle.textContent = slide.subtitle || "";
+
+    const list = document.createElement("ul");
+
+    slide.bullets.forEach(point => {
+      const li = document.createElement("li");
+      li.textContent = point;
+      list.appendChild(li);
+    });
+
+    card.append(number, heading, subtitle, list);
+
+    if (slide.takeaway) {
+      const takeaway = document.createElement("div");
+      takeaway.className = "takeaway";
+      takeaway.textContent = "✦ KEY TAKEAWAY: " + slide.takeaway;
+      card.appendChild(takeaway);
+    }
+
+    card.dataset.search = [
+      slide.title,
+      slide.subtitle,
+      ...slide.bullets,
+      slide.takeaway
+    ].join(" ").toLowerCase();
+
+    slideList.appendChild(card);
+
+  });
+
+}
+
+
+// =======================================
+// SEARCH SLIDES
+// =======================================
+
+$("slideSearch").addEventListener("input", event => {
+
+  const query = event.target.value.toLowerCase().trim();
+  let visible = 0;
+
+  document.querySelectorAll(".slide-card").forEach(card => {
+
+    const match = card.dataset.search.includes(query);
+
+    card.style.display = match ? "" : "none";
+
+    if (match) visible++;
+
+  });
+
+  const oldEmpty = $("noResults");
+  if (oldEmpty) oldEmpty.remove();
+
+  if (visible === 0) {
+    const empty = document.createElement("div");
+    empty.id = "noResults";
+    empty.className = "empty";
+    empty.textContent = "No matching slides found.";
+    slideList.appendChild(empty);
+  }
+
+});
+
+
+// =======================================
+// COPY PRESENTATION OUTLINE
+// =======================================
+
+$("copyBtn").addEventListener("click", async () => {
+
+  if (!currentDeck) return;
+
+  const outline = currentDeck.slides.map((slide, index) => {
+
+    return [
+      "SLIDE " + (index + 1) + ": " + slide.title,
+      slide.subtitle || "",
+      ...slide.bullets.map(point => "- " + point),
+      slide.takeaway ? "Key takeaway: " + slide.takeaway : ""
+    ].filter(Boolean).join("\n");
+
+  }).join("\n\n");
+
+  try {
+    await navigator.clipboard.writeText(outline);
+    showStatus("Presentation outline copied!", "success");
+  } catch {
+    showStatus("Clipboard access was unavailable.", "error");
+  }
+
+});
+
+
+// =======================================
+// START NEW PRESENTATION
+// =======================================
+
+$("newBtn").addEventListener("click", () => {
+
+  currentDeck = null;
+  results.style.display = "none";
+  topic.value = "";
+  $("charCount").textContent = "0";
+  $("slideSearch").value = "";
+  clearStatus();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  topic.focus();
+
+});
+
+
+// =======================================
+// POWERPOINT DESIGN SETTINGS
+// =======================================
+
+function getTheme(name) {
+
+  const themes = {
+
+    "Professional": {
+      bg: "F3F6FB",
+      title: "122B4B",
+      text: "34445C",
+      accent: "D6A943",
+      cover: "10264B",
+      coverText: "FFFFFF",
+      card: "FFFFFF"
+    },
+
+    "Modern Dark": {
+      bg: "101827",
+      title: "F5C85D",
+      text: "E0E7F1",
+      accent: "47B8D6",
+      cover: "091326",
+      coverText: "FFFFFF",
+      card: "1C2C44"
+    },
+
+    "Educational": {
+      bg: "F1F7FF",
+      title: "174A83",
+      text: "334F6E",
+      accent: "2CBF9A",
+      cover: "164B78",
+      coverText: "FFFFFF",
+      card: "FFFFFF"
+    },
+
+    "Minimal White": {
+      bg: "FFFFFF",
+      title: "202B3C",
+      text: "4E5A6B",
+      accent: "4E83C5",
+      cover: "FFFFFF",
+      coverText: "202B3C",
+      card: "F5F7FA"
+    },
+
+    "Creative Colourful": {
+      bg: "F9F4FF",
+      title: "482A73",
+      text: "443E5A",
+      accent: "E48B54",
+      cover: "42266C",
+      coverText: "FFFFFF",
+      card: "FFFFFF"
+    }
+
+  };
+
+  return themes[name] || themes.Professional;
+
+}
+
+
+// =======================================
+// EXPORT POWERPOINT
+// =======================================
+
+downloadBtn.addEventListener("click", async () => {
+
+  if (!currentDeck) return;
+
+  if (typeof pptxgen === "undefined") {
+    showStatus("PowerPoint library failed to load. Refresh and try again.", "error");
+    return;
+  }
+
+  downloadBtn.disabled = true;
+  downloadBtn.textContent = "PREPARING POWERPOINT...";
+
+  try {
+
+    const pptx = new pptxgen();
+    const theme = getTheme(currentTheme);
+
+    pptx.layout = "LAYOUT_WIDE";
+    pptx.author = "SlideGen AI";
+    pptx.subject = currentDeck.presentationTitle || "AI Presentation";
+    pptx.title = currentDeck.presentationTitle || "AI Presentation";
+    pptx.company = "SlideGen AI";
+    pptx.lang = "en-US";
+
+    pptx.theme = {
+      headFontFace: "Aptos Display",
+      bodyFontFace: "Aptos",
+      lang: "en-US"
+    };
+
+    const W = 13.333;
+    const H = 7.5;
+
+    currentDeck.slides.forEach((item, index) => {
+
+      const slide = pptx.addSlide();
+      const isCover = index === 0;
+      const isLast = index === currentDeck.slides.length - 1;
+
+      slide.background = {
+        color: isCover ? theme.cover : theme.bg
+      };
+
+      if (isCover) {
+
+        slide.addShape(pptx.ShapeType.rect, {
+          x: 0, y: 0.1, w: W, h: 0.13,
+          line: { color: theme.accent },
+          fill: { color: theme.accent }
+        });
+
+        slide.addText("SLIDEGEN AI  /  PRESENTATION", {
+          x: 0.85, y: 1.05, w: 11.5, h: 0.35,
+          fontSize: 12,
+          bold: true,
+          charSpacing: 3,
+          color: theme.accent
+        });
+
+        slide.addShape(pptx.ShapeType.line, {
+          x: 0.85, y: 1.65, w: 1.1, h: 0,
+          line: { color: theme.accent, width: 3 }
+        });
+
+        slide.addText(item.title || currentDeck.presentationTitle, {
+          x: 0.85, y: 2.0, w: 11.3, h: 2.0,
+          fontSize: 36,
+          bold: true,
+          color: theme.coverText,
+          breakLine: false,
+          valign: "mid",
+          fit: "shrink",
+          margin: 0.04
+        });
+
+        slide.addText(item.subtitle || "An AI-generated presentation", {
+          x: 0.9, y: 4.35, w: 10.8, h: 0.8,
+          fontSize: 19,
+          color: theme.accent,
+          fit: "shrink"
+        });
+
+        slide.addText("CREATED WITH SLIDEGEN AI", {
+          x: 0.9, y: 6.55, w: 10, h: 0.3,
+          fontSize: 10,
+          charSpacing: 2,
+          color: theme.coverText
+        });
+
+      } else {
+
+        slide.addShape(pptx.ShapeType.rect, {
+          x: 0, y: 0, w: W, h: 0.13,
+          line: { color: theme.accent },
+          fill: { color: theme.accent }
+        });
+
+        slide.addText(
+          String(index + 1).padStart(2, "0"),
+          {
+            x: 11.7, y: 0.45, w: 0.9, h: 0.35,
+            fontSize: 12,
+            bold: true,
+            color: theme.accent,
+            align: "right"
+          }
+        );
+
+        slide.addText(item.title || "Presentation", {
+          x: 0.7, y: 0.55, w: 11.3, h: 0.75,
+          fontSize: 27,
+          bold: true,
+          color: theme.title,
+          fit: "shrink",
+          margin: 0.03
+        });
+
+        if (item.subtitle) {
+          slide.addText(item.subtitle, {
+            x: 0.75, y: 1.38, w: 11.7, h: 0.42,
+            fontSize: 12,
+            color: theme.text,
+            fit: "shrink"
+          });
+        }
+
+        const points = Array.isArray(item.bullets)
+          ? item.bullets.slice(0, 7)
+          : [];
+
+        const startY = item.subtitle ? 2.0 : 1.75;
+        const availableH = item.takeaway ? 3.65 : 4.5;
+        const rowH = Math.min(0.88, availableH / Math.max(points.length, 1));
+
+        points.forEach((point, pIndex) => {
+
+          const y = startY + pIndex * rowH;
+
+          slide.addShape(pptx.ShapeType.ellipse, {
+            x: 0.85, y: y + 0.17, w: 0.13, h: 0.13,
+            line: { color: theme.accent },
+            fill: { color: theme.accent }
+          });
+
+          slide.addText(String(point), {
+            x: 1.15, y: y + 0.03, w: 11.1, h: rowH - 0.06,
+            fontSize: 18,
+            color: theme.text,
+            valign: "mid",
+            breakLine: false,
+            fit: "shrink",
+            margin: 0.04
+          });
+
+        });
+
+        if (item.takeaway) {
+
+          slide.addShape(pptx.ShapeType.roundRect, {
+            x: 0.75, y: 6.05, w: 11.85, h: 0.75,
+            rectRadius: 0.08,
+            line: { color: theme.accent, transparency: 20 },
+            fill: { color: theme.card }
+          });
+
+          slide.addText("✦  KEY TAKEAWAY  |  " + item.takeaway, {
+            x: 0.95, y: 6.17, w: 11.45, h: 0.45,
+            fontSize: 12,
+            bold: true,
+            color: theme.title,
+            valign: "mid",
+            fit: "shrink"
+          });
+
+        }
+
+        slide.addText(
+          "SLIDEGEN AI  •  " + (index + 1) + " / " + currentDeck.slides.length,
+          {
+            x: 9.7, y: 7.08, w: 2.9, h: 0.2,
+            fontSize: 9,
+            color: theme.text,
+            align: "right"
+          }
+        );
+
+      }
+
+      if (isLast && !isCover) {
+        slide.addText("THANK YOU", {
+          x: 0.8, y: 6.85, w: 3, h: 0.3,
+          fontSize: 10,
+          bold: true,
+          color: theme.accent
+        });
+      }
+
+    });
+
+    const filename = (
+      currentDeck.presentationTitle || "SlideGen_Presentation"
+    ).replace(/[^\w-]+/g, "_").slice(0, 55) + ".pptx";
+
+    await pptx.writeFile({ fileName: filename });
+
+    showStatus("✓ Your PowerPoint has been downloaded successfully!", "success");
+
+  } catch (error) {
+
+    showStatus("PowerPoint creation failed: " + error.message, "error");
+
+  } finally {
+
+    downloadBtn.disabled = false;
+    downloadBtn.textContent = "↓  DOWNLOAD PPTX";
+
+  }
+
+});
+
+</script>
+</body>
+</html>
+
